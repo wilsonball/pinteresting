@@ -1,6 +1,6 @@
 <%= render 'pages/home' unless user_signed_in? %>
 <div id="pins" class="transitions-enabled">
-  <% @pins.each do |pin| %>
+  <% @pins.order("created_at desc").each do |pin| %>
     <%= link_to pin do %>
       <div class="box panel panel-default">
         <%= image_tag pin.image.url(:medium) %>
@@ -10,15 +10,17 @@
           <%= pin.user.email %><br>
           <% if current_user == pin.user %>
             <%= link_to edit_pin_path(pin) do %>
-              <span class="glyphicon glyphicon-edit"></span>
-              Edit
+              <span class="glyphicon glyphicon-edit"></span> Edit
             <% end %>
             <%= link_to pin, method: :delete, data: { confirm: 'Are you sure?' } do %>
-              <span class="glyphicon glyphicon-trash"></span>
-              Delete
+              <span class="glyphicon glyphicon-trash"></span> Delete
             <% end %>     
           <% end %>
         </div>  
       </div>
   <% end %>
+</div>
+
+<div class="center">
+   <%= will_paginate @pins, renderer: BootstrapPagination::Rails %>
 </div>
